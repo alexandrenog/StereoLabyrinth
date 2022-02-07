@@ -1,0 +1,1 @@
+crystal build src/stereo_labyrinth.cr

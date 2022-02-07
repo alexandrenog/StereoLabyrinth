@@ -1,0 +1,1 @@
+crystal run src/stereo_labyrinth.cr
