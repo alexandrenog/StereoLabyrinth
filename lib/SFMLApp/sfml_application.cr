@@ -1,13 +1,16 @@
 require "./monkeypatches/*"
 require "./component/*"
 
+alias ComponentKey = Symbol | Int32
+
 class SFMLApplication
     property window : SF::RenderWindow
-    property components : Hash(Symbol, Component)
+    property components : Hash(ComponentKey, Component)
+    property components_index : Int32 = 0
 
     def initialize(width, height, title, window_style = SF::Style::Default)
         @window = SF::RenderWindow.new(SF::VideoMode.new(width, height), title, window_style)
-        @components = Hash(Symbol, Component).new
+        @components = Hash(ComponentKey, Component).new
         begin
             create_components
         rescue exception
@@ -50,6 +53,11 @@ class SFMLApplication
                 component.update
             end
         end
+    end
+    def context()
+        numbered_context = context(@components_index)
+        @components_index+=1
+        return numbered_context
     end
     def context (componentKey)
         return {application: self, componentKey: componentKey}

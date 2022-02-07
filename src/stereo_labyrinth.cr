@@ -11,17 +11,17 @@ class StereoLabyrinth < SFMLApplication
         generate_labyrinth
     end
     def create_components
-        VisitedGrid.new(context(:visited), 96,54){false}
+        VisitedGrid.new(context(:visited), 96, 54){false}
         WallGrid.new(context(:verticalWalls), visited.cols+1, visited.rows  , Orientation::Vertical   ){true}
         WallGrid.new(context(:horizontalWalls), visited.cols, visited.rows+1, Orientation::Horizontal ){true}
         FPSCounter.new(context(:fpsCounter), SF::Text.create(FONT, SF::Vector2f.new(10,10),24, SF::Color::Red))
-        Square.new(context(:square), SF::Vector2.new(@start_x,@start_y).to_f32*visited.cell_width + SF::Vector2.new(1,1), 8, SF::Color::Red)
+        Square.new(context(), SF::Vector2.new(@start_x,@start_y).to_f32*visited.cell_width + SF::Vector2.new(1,1), 8, SF::Color::Red)
+        Square.new(context(), SF::Vector2.new(visited.cols-1,visited.rows-1).to_f32*visited.cell_width + SF::Vector2.new(1,1), 8, SF::Color::Red)
     end
     def visited; c(:visited).as(VisitedGrid); end
     def vertical_walls; c(:verticalWalls).as(WallGrid); end
     def horizontal_walls; c(:horizontalWalls).as(WallGrid); end
     def fps_counter; c(:fpsCounter).as(FPSCounter); end
-    def square; c(:square).as(Square); end
     
     def generate_labyrinth
         visited.set_each_cell do |i,j| false end

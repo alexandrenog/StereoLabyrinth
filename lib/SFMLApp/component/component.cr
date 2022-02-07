@@ -1,8 +1,8 @@
 class Component
     property application : SFMLApplication
-    property componentKey : Symbol
+    property componentKey : ComponentKey
 
-    def initialize(context : NamedTuple(application: SFMLApplication, componentKey: Symbol))
+    def initialize(context : NamedTuple(application: SFMLApplication, componentKey: ComponentKey))
         @application = context[:application]
         @componentKey = context[:componentKey]
         @application.addComponent(@componentKey,self)

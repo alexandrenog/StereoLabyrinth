@@ -42,15 +42,27 @@ class Grid(T) < Component
             end
         end
     end
-    def any_overlapping?(rect)
-        @cells.each_with_index do |row, i|
-            row.each_with_index do |value, j|
-                cell_rect = SF::Rect.new( cell_pos(i,j).to_f32, @cell_shape.size)
-                if value && rect.intersects?(cell_rect)
-                    return true
+    def overlapping_candidates(rect)
+        candidates = [] of NamedTuple(i: Int32, j: Int32)
+        i,j = (rect.top//@cell_width).to_i32, (rect.left//@cell_width).to_i32
+        i_range, j_range = ((i-1)..(i+1)), ((j-1)..(j+1))
+        i_range.each do | _i|
+            j_range.each do |_j|
+                if _i >= 0 && _i < @rows && _j >= 0 && _j < @cols
+                    candidates.push({i: _i, j: _j})
                 end
             end
         end
-        return false
+        candidates
+    end
+    def any_overlapping?(rect)
+        candidates = overlapping_candidates(rect)
+        candidates.each do |candidate|
+            cell_rect = SF::Rect.new( cell_pos(candidate[:i],candidate[:j]).to_f32, @cell_shape.size)
+            if @cells[candidate[:i]][candidate[:j]] && rect.intersects?(cell_rect)
+                return true
+            end
+        end
+        false
     end
 end
